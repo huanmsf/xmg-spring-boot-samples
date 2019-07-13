@@ -6,8 +6,8 @@
 ## 第二章 理解独立的 Spring 应用
 
 ### 2.2 运行 Spring Boot 应用
-* > idea 启动
-* > mvn spring-boot:run 
+> idea 启动  
+> mvn spring-boot:run   
 
 #### 2.2.1 执行 java -jar
 ```java -jar target/chapter2-1.0-SNAPSHOT.jar```
@@ -305,7 +305,18 @@ root@kali:/tmp/jar02# java org.springframework.boot.loader.JarLauncher
 
 ## 第三章 理解固话的 Maven 依赖
 
+### 3.2 spring-boot-starter-parent 与 spring-boot-dependencies
+> 为了统一管理 spring-boot 组件的版本，可以继承 spring-boot-starter-parent 也可以依赖 spring-boot-dependencies  
+其实 spring-boot-starter-parent 继承自 spring-boot-dependencies 所以我们也可以继承 spring-boot-dependencies  
+spring-boot-dependencies 中对以来的jar做了版本控制  
+
+
 ## 第四章 理解嵌入式 Web 容器
+
+### 4.1 嵌入式 Servlet Web 容器 
+
+### 4.2 嵌入式 Reactive Web 容器 
+
 
 ## 第五章　理解自动装配
 
