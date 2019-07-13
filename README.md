@@ -1,4 +1,4 @@
-# 《Spring Boot 编程思想 》笔记
+# 《Spring Boot 编程思想 》学习笔记
 > [小马哥《Spring Boot 编程思想 》](https://github.com/mercyblitz/thinking-in-spring-boot-samples)
 
 ## 第一章 初览 Spring Boot
