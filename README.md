@@ -315,8 +315,281 @@ spring-boot-dependencies 中对以来的jar做了版本控制
 
 ### 4.1 嵌入式 Servlet Web 容器 
 
-### 4.2 嵌入式 Reactive Web 容器 
+* Tomcat
+默认的 spring-boot-starter-web 包含 Tomcat 
+```text
+Tomcat started on port(s): 8080 (http) with context path ''
 
+```
+
+
+* Jetty
+```xml
+        <dependency>
+            <!--Tomcat-->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+
+            <!--排除 Tomcat-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!--使用 Jetty-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
+        </dependency>
+
+```
+输出：
+```text
+Connected to the target VM, address: '127.0.0.1:33651', transport: 'socket'
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.1.5.RELEASE)
+
+2019-07-13 22:50:56.647  INFO 7221 --- [           main] x.s.b.s.c.FirstAppByGuiApplication       : Starting FirstAppByGuiApplication on kali with PID 7221 (/opt/Codes/xmg-spring-boot-samples/chapter4/target/classes started by root in /opt/Codes/xmg-spring-boot-samples)
+2019-07-13 22:50:56.649  INFO 7221 --- [           main] x.s.b.s.c.FirstAppByGuiApplication       : No active profile set, falling back to default profiles: default
+2019-07-13 22:50:57.680  INFO 7221 --- [           main] org.eclipse.jetty.util.log               : Logging initialized @2065ms to org.eclipse.jetty.util.log.Slf4jLog
+2019-07-13 22:50:57.732  INFO 7221 --- [           main] o.s.b.w.e.j.JettyServletWebServerFactory : Server initialized with port: 8080
+2019-07-13 22:50:57.735  INFO 7221 --- [           main] org.eclipse.jetty.server.Server          : jetty-9.4.18.v20190429; built: 2019-04-29T20:42:08.989Z; git: e1bc35120a6617ee3df052294e433f3a25ce7097; jvm 1.8.0_211-b12
+2019-07-13 22:50:57.763  INFO 7221 --- [           main] o.e.j.s.h.ContextHandler.application     : Initializing Spring embedded WebApplicationContext
+2019-07-13 22:50:57.763  INFO 7221 --- [           main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 999 ms
+2019-07-13 22:50:57.840  INFO 7221 --- [           main] org.eclipse.jetty.server.session         : DefaultSessionIdManager workerName=node0
+2019-07-13 22:50:57.840  INFO 7221 --- [           main] org.eclipse.jetty.server.session         : No SessionScavenger set, using defaults
+2019-07-13 22:50:57.841  INFO 7221 --- [           main] org.eclipse.jetty.server.session         : node0 Scavenging every 600000ms
+2019-07-13 22:50:57.848  INFO 7221 --- [           main] o.e.jetty.server.handler.ContextHandler  : Started o.s.b.w.e.j.JettyEmbeddedWebAppContext@2e3f79a2{application,/,[file:///tmp/jetty-docbase.768196404040356109.8080/],AVAILABLE}
+2019-07-13 22:50:57.848  INFO 7221 --- [           main] org.eclipse.jetty.server.Server          : Started @2234ms
+2019-07-13 22:50:57.986  INFO 7221 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-07-13 22:50:58.124  INFO 7221 --- [           main] o.e.j.s.h.ContextHandler.application     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2019-07-13 22:50:58.125  INFO 7221 --- [           main] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2019-07-13 22:50:58.130  INFO 7221 --- [           main] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2019-07-13 22:50:58.145  INFO 7221 --- [           main] o.e.jetty.server.AbstractConnector       : Started ServerConnector@7fc645e4{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+2019-07-13 22:50:58.148  INFO 7221 --- [           main] o.s.b.web.embedded.jetty.JettyWebServer  : Jetty started on port(s) 8080 (http/1.1) with context path '/'
+2019-07-13 22:50:58.150  INFO 7221 --- [           main] x.s.b.s.c.FirstAppByGuiApplication       : Started FirstAppByGuiApplication in 1.893 seconds (JVM running for 2.535)
+
+```
+* Undertow
+
+```xml
+        <!--使用 undertow-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
+        </dependency>
+```
+```text
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.1.5.RELEASE)
+
+2019-07-13 23:02:18.997  INFO 7839 --- [           main] x.s.b.s.c.FirstAppByGuiApplication       : Starting FirstAppByGuiApplication on kali with PID 7839 (/opt/Codes/xmg-spring-boot-samples/chapter4/target/classes started by root in /opt/Codes/xmg-spring-boot-samples)
+2019-07-13 23:02:18.999  INFO 7839 --- [           main] x.s.b.s.c.FirstAppByGuiApplication       : No active profile set, falling back to default profiles: default
+2019-07-13 23:02:19.906  WARN 7839 --- [           main] io.undertow.websockets.jsr               : UT026010: Buffer pool was not set on WebSocketDeploymentInfo, the default pool will be used
+2019-07-13 23:02:19.924  INFO 7839 --- [           main] io.undertow.servlet                      : Initializing Spring embedded WebApplicationContext
+2019-07-13 23:02:19.924  INFO 7839 --- [           main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 895 ms
+2019-07-13 23:02:20.085  INFO 7839 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-07-13 23:02:20.214  INFO 7839 --- [           main] org.xnio                                 : XNIO version 3.3.8.Final
+2019-07-13 23:02:20.220  INFO 7839 --- [           main] org.xnio.nio                             : XNIO NIO Implementation Version 3.3.8.Final
+2019-07-13 23:02:20.263  INFO 7839 --- [           main] o.s.b.w.e.u.UndertowServletWebServer     : Undertow started on port(s) 8080 (http) with context path ''
+2019-07-13 23:02:20.265  INFO 7839 --- [           main] x.s.b.s.c.FirstAppByGuiApplication       : Started FirstAppByGuiApplication in 1.527 seconds (JVM running for 2.073)
+
+```
+
+### 4.2 嵌入式 Reactive Web 容器 
+同时存在 ```spring-boot-starter-web``` 和 ```spring-boot-starter-webflux```  
+自动忽略后者  
+
+* undertow 
+```xml
+
+ <!--       <dependency>
+            &lt;!&ndash;Tomcat&ndash;&gt;
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+
+            &lt;!&ndash;排除 Tomcat&ndash;&gt;
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>-->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <!--使用 undertow-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
+        </dependency>
+
+
+```
+
+```text
+Connected to the target VM, address: '127.0.0.1:39157', transport: 'socket'
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.1.5.RELEASE)
+
+2019-07-13 23:08:55.733  INFO 8412 --- [           main] x.s.b.s.c.FirstAppByGuiApplication       : Starting FirstAppByGuiApplication on kali with PID 8412 (/opt/Codes/xmg-spring-boot-samples/chapter4/target/classes started by root in /opt/Codes/xmg-spring-boot-samples)
+2019-07-13 23:08:55.756  INFO 8412 --- [           main] x.s.b.s.c.FirstAppByGuiApplication       : No active profile set, falling back to default profiles: default
+2019-07-13 23:08:56.931  INFO 8412 --- [           main] org.xnio                                 : XNIO version 3.3.8.Final
+2019-07-13 23:08:56.939  INFO 8412 --- [           main] org.xnio.nio                             : XNIO NIO Implementation Version 3.3.8.Final
+2019-07-13 23:08:56.991  INFO 8412 --- [           main] o.s.b.w.e.undertow.UndertowWebServer     : Undertow started on port(s) 8080 (http)
+2019-07-13 23:08:56.994  INFO 8412 --- [           main] x.s.b.s.c.FirstAppByGuiApplication       : Started FirstAppByGuiApplication in 1.719 seconds (JVM running for 2.566)
+
+```
+
+```java
+    /**
+     * webflux
+     */
+    @Bean
+    public RouterFunction<ServerResponse> helloWorld() {
+        return route(GET("/hello"), request -> ok().body(Mono.just("Hello World"), String.class));
+    }
+    
+```
+
+Spring Boot 应用启动后获取 WebServer  
+执行 ApplicationRunner##run
+
+```java
+@SpringBootApplication
+public class FirstAppByGuiApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(FirstAppByGuiApplication.class);
+    }
+
+    /**
+     * 输出 WebServer 实现类
+     */
+    @Bean
+    public ApplicationRunner applicationRunner(WebServerApplicationContext context) {
+        return args -> {
+            System.out.println("当前 WebServer 实现类：" +
+                    context.getWebServer().getClass().getName());
+        };
+    }
+}
+
+```
+
+#### 4.2.3 WebServerInitializedEvent  
+获取服务的端口  
+修改上面的例子  
+```java
+    /**
+     * 输出 WebServer 实现类
+     */
+    @Bean
+    public ApplicationRunner applicationRunner(WebServerApplicationContext context) {
+        return args -> {
+            System.out.println("当前 WebServer 实现类：" +
+                    context.getWebServer().getClass().getName() +
+                    " ,port:" + context.getWebServer().getPort());
+        };
+    }
+```
+WebServerInitializedEvent 获取 当前 WebServer 实现类 
+```java
+    /**
+     * EventListener 获取 当前 WebServer 实现类
+     */
+    @EventListener(WebServerInitializedEvent.class)
+    public void onWebServerRready(WebServerInitializedEvent event) {
+        System.out.println("EventListener 获取 当前 WebServer 实现类：" +
+                event.getWebServer().getClass().getName() +
+                " ,port:" + event.getWebServer().getPort());
+    }
+```
+结果：
+```text
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.1.5.RELEASE)
+
+2019-07-14 05:21:02.222  INFO 14323 --- [           main] x.s.b.s.c.FirstAppByGuiApplication       : Starting FirstAppByGuiApplication on kali with PID 14323 (/opt/Codes/xmg-spring-boot-samples/chapter4/target/classes started by root in /opt/Codes/xmg-spring-boot-samples)
+2019-07-14 05:21:02.224  INFO 14323 --- [           main] x.s.b.s.c.FirstAppByGuiApplication       : No active profile set, falling back to default profiles: default
+2019-07-14 05:21:03.440  INFO 14323 --- [           main] org.xnio                                 : XNIO version 3.3.8.Final
+2019-07-14 05:21:03.446  INFO 14323 --- [           main] org.xnio.nio                             : XNIO NIO Implementation Version 3.3.8.Final
+2019-07-14 05:21:03.492  INFO 14323 --- [           main] o.s.b.w.e.undertow.UndertowWebServer     : Undertow started on port(s) 8080 (http)
+EventListener 获取 当前 WebServer 实现类：org.springframework.boot.web.embedded.undertow.UndertowWebServer ,port:8080
+2019-07-14 05:21:03.495  INFO 14323 --- [           main] x.s.b.s.c.FirstAppByGuiApplication       : Started FirstAppByGuiApplication in 1.598 seconds (JVM running for 2.022)
+当前 WebServer 实现类：org.springframework.boot.web.embedded.undertow.UndertowWebServer ,port:8080
+
+```
+
+WebServerInitializedEvent 事件比 ApplicationRunner 更早触发  
+
+* Jetty
+替换为Jetty  
+```xml
+        <!--使用 Jetty-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
+        </dependency>
+```
+
+* Tomcat
+替换为Tomcat  
+```xml
+        <!--使用 tomcat-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </dependency>
+```
+
+* Netty
+啥都不依赖，默认是 Netty
+```text
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.1.5.RELEASE)
+
+2019-07-14 05:32:57.356  INFO 16841 --- [           main] x.s.b.s.c.FirstAppByGuiApplication       : Starting FirstAppByGuiApplication on kali with PID 16841 (/opt/Codes/xmg-spring-boot-samples/chapter4/target/classes started by root in /opt/Codes/xmg-spring-boot-samples)
+2019-07-14 05:32:57.360  INFO 16841 --- [           main] x.s.b.s.c.FirstAppByGuiApplication       : No active profile set, falling back to default profiles: default
+2019-07-14 05:32:58.681  INFO 16841 --- [           main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port(s): 8080
+EventListener 获取 当前 WebServer 实现类：org.springframework.boot.web.embedded.netty.NettyWebServer ,port:8080
+2019-07-14 05:32:58.685  INFO 16841 --- [           main] x.s.b.s.c.FirstAppByGuiApplication       : Started FirstAppByGuiApplication in 1.774 seconds (JVM running for 2.349)
+当前 WebServer 实现类：org.springframework.boot.web.embedded.netty.NettyWebServer ,port:8080
+
+```
 
 ## 第五章　理解自动装配
 
@@ -333,4 +606,27 @@ spring-boot-dependencies 中对以来的jar做了版本控制
 ## 第十一章 SpringApplication 运行阶段
 
 ## 第十二章 SpringApplication 结束阶段
+
+## 值得注意
+
+### maven 编译指定 java 版本
+```xml
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+    
+```
+```xml
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compier-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <souce>${java.version}</souce>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+```
 
