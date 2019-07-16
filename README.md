@@ -591,7 +591,201 @@ EventListener 获取 当前 WebServer 实现类：org.springframework.boot.web.e
 
 ```
 
-## 第五章　理解自动装配
+## 第五章　理解自动装配  
+
+### 5.1 理解 @SpringBootApplication 注解
+```java
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Inherited
+@SpringBootConfiguration
+@EnableAutoConfiguration
+@ComponentScan(
+    excludeFilters = {@Filter(
+    type = FilterType.CUSTOM,
+    classes = {TypeExcludeFilter.class}
+), @Filter(
+    type = FilterType.CUSTOM,
+    classes = {AutoConfigurationExcludeFilter.class}
+)}
+)
+public @interface SpringBootApplication {
+   
+}
+```
+> @SpringBootApplication 激活了   
+@EnableAutoConfiguration  
+@SpringBootConfiguration(等价 @Configuration)   
+@ComponentScan  
+
+> @EnableAutoConfiguration 负责自动装配  
+@Configuration 标注为配置类  
+@ComponentScan 组件扫描  
+
+***所以替换 @SpringBootApplication 为以上三者结果一样***
+
+### 5.2 @SpringBootApplication 别名  
+
+```text
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── xmg
+│   │   │       └── spring
+│   │   │           └── boot
+│   │   │               └── samples
+│   │   │                   └── chapter5
+│   │   │                       ├── boot
+│   │   │                       ├── config
+│   │   │                       │   └── WebConfiguration.java
+│   │   │                       └── FirstAppByGuiApplication.java
+
+```
+```java
+@Configuration
+public class WebConfiguration {
+    /**
+     * webflux
+     */
+    @Bean
+    public RouterFunction<ServerResponse> helloWorld() {
+        return route(GET("/hello"), request -> ok().body(Mono.just("Hello World"), String.class));
+    }
+}
+
+```
+```java
+@SpringBootApplication
+public class FirstAppByGuiApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(FirstAppByGuiApplication.class);
+    }
+
+}
+```
+以上可以直接启动，正常访问
+
+调整目录后需要指定扫描的包
+
+```text
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── xmg
+│   │   │       └── spring
+│   │   │           └── boot
+│   │   │               └── samples
+│   │   │                   └── chapter5
+│   │   │                       ├── boot
+│   │   │                       │   └── FirstAppByGuiApplication.java
+│   │   │                       └── config
+│   │   │                           └── WebConfiguration.java
+│   │   └── resources
+
+```
+需要调整
+```java
+@SpringBootApplication(scanBasePackages = "xmg.spring.boot.samples.chapter5.config")
+public class FirstAppByGuiApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(FirstAppByGuiApplication.class);
+    }
+
+}
+```
+@SpringBootApplication 注解 ：
+
+```java
+public @interface SpringBootApplication {
+    @AliasFor(
+        annotation = EnableAutoConfiguration.class
+    )
+    Class<?>[] exclude() default {};
+
+    @AliasFor(
+        annotation = EnableAutoConfiguration.class
+    )
+    String[] excludeName() default {};
+
+    @AliasFor(
+        annotation = ComponentScan.class,
+        attribute = "basePackages"
+    )
+    String[] scanBasePackages() default {};
+}
+
+```
+annotation = Xxx.class 就是把 @Xxx 注解引入  
+attribute = “aaa” 没有就是下面的接口名(和Xxx.class 里的接口名一样)，有就是 Xxx.class 里的接口名  
+主要作用是用新的名称代替原来的名称  
+
+```java
+public @interface ComponentScan {
+    @AliasFor("basePackages")
+    String[] value() default {};
+
+}
+```
+
+### 5.3 @SpringBootApplication 标注非引导类  
+
+```java
+
+public class FirstAppByGuiApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(WebConfiguration.class);
+    }
+
+}
+```
+```java
+@SpringBootApplication(scanBasePackages = "xmg.spring.boot.samples.chapter5.config")
+public class WebConfiguration {
+    /**
+     * webflux
+     */
+    @Bean
+    public RouterFunction<ServerResponse> helloWorld() {
+        return route(GET("/hello"), request -> ok().body(Mono.just("Hello World"), String.class));
+    }
+}
+
+```
+> 注意：SpringApplication.run(WebConfiguration.class);   
+@SpringBootApplication 不止可以加在引导类   
+run()方法里面是要有 @SpringBootApplication或等价注解的资源配置类  
+
+***那么 WebConfiguration 上的 @SpringBootApplication 可以替换为 @EnableAutoConfiguration ?***
+
+### 5.4 @EnableAutoConfiguration 激活自动装配  
+```java
+@EnableAutoConfiguration
+public class WebConfiguration {
+    /**
+     * webflux
+     */
+    @Bean
+    public RouterFunction<ServerResponse> helloWorld() {
+        return route(GET("/hello"), request -> ok().body(Mono.just("Hello World"), String.class));
+    }
+}
+```
+这样是可以的，@EnableAutoConfiguration 没有派生自 @ComponentScan 所以也没有包扫描 
+以上说明 SpringApplication#run 并非强依赖 @ComponentScan  
+***然而对于 @Bean 标注的Bean的类型存在差异***  
+
+
+### 5.5 @SpringBootApplication 继承 @Configuration CGLIB 提升特性
+
+### 5.6 理解自动配置机制 
+
+### 5.7 创建自动装配类 
+
+
 
 ## 第六章　理解 Production Ready 特性
 
