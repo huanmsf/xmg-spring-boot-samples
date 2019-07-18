@@ -780,12 +780,256 @@ public class WebConfiguration {
 
 
 ### 5.5 @SpringBootApplication 继承 @Configuration CGLIB 提升特性
+非 @Configuration 
+```java
+@EnableAutoConfiguration
+public class WebConfiguration {
+    /**
+     * webflux
+     */
+    @Bean
+    public RouterFunction<ServerResponse> helloWorld() {
+        return route(GET("/hello"), request -> ok().body(Mono.just("Hello World"), String.class));
+    }
+
+    /**
+     * 输出 WebServer 实现类
+     */
+    @Bean
+    public ApplicationRunner applicationRunner(BeanFactory beanFactory) {
+        return args -> {
+            System.out.println("当前 helloWorld Bean 实现类：" +
+                    beanFactory.getBean("helloWorld").getClass().getName());
+
+            System.out.println("当前 WebConfiguration Bean 实现类：" +
+                    beanFactory.getBean(WebConfiguration.class).getClass().getName());
+        };
+    }
+}
+
+
+```
+结果：
+```text
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.1.5.RELEASE)
+
+2019-07-18 10:43:38.979  INFO 7196 --- [           main] x.s.b.s.c.boot.FirstAppByGuiApplication  : Starting FirstAppByGuiApplication on kali with PID 7196 (/opt/Codes/xmg-spring-boot-samples/chapter5/target/classes started by root in /opt/Codes/xmg-spring-boot-samples)
+2019-07-18 10:43:38.992  INFO 7196 --- [           main] x.s.b.s.c.boot.FirstAppByGuiApplication  : No active profile set, falling back to default profiles: default
+2019-07-18 10:43:40.725  INFO 7196 --- [           main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port(s): 8080
+2019-07-18 10:43:40.728  INFO 7196 --- [           main] x.s.b.s.c.boot.FirstAppByGuiApplication  : Started FirstAppByGuiApplication in 2.457 seconds (JVM running for 2.981)
+当前 helloWorld Bean 实现类：org.springframework.web.reactive.function.server.RouterFunctions$DefaultRouterFunction
+当前 WebConfiguration Bean 实现类：xmg.spring.boot.samples.chapter5.config.WebConfiguration
+
+```
+@Configuration CGLIB 提升特性
+
+```java
+@SpringBootApplication
+public class WebConfiguration {
+    /**
+     * webflux
+     */
+    @Bean
+    public RouterFunction<ServerResponse> helloWorld() {
+        return route(GET("/hello"), request -> ok().body(Mono.just("Hello World"), String.class));
+    }
+
+    /**
+     * 输出 WebServer 实现类
+     */
+    @Bean
+    public ApplicationRunner applicationRunner(BeanFactory beanFactory) {
+        return args -> {
+            System.out.println("当前 helloWorld Bean 实现类：" +
+                    beanFactory.getBean("helloWorld").getClass().getName());
+
+            System.out.println("当前 WebConfiguration Bean 实现类：" +
+                    beanFactory.getBean(WebConfiguration.class).getClass().getName());
+        };
+    }
+}
+
+
+```
+
+```text
+
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.1.5.RELEASE)
+
+2019-07-18 10:44:57.669  INFO 7293 --- [           main] x.s.b.s.c.boot.FirstAppByGuiApplication  : Starting FirstAppByGuiApplication on kali with PID 7293 (/opt/Codes/xmg-spring-boot-samples/chapter5/target/classes started by root in /opt/Codes/xmg-spring-boot-samples)
+2019-07-18 10:44:57.672  INFO 7293 --- [           main] x.s.b.s.c.boot.FirstAppByGuiApplication  : No active profile set, falling back to default profiles: default
+2019-07-18 10:44:59.683  INFO 7293 --- [           main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port(s): 8080
+2019-07-18 10:44:59.689  INFO 7293 --- [           main] x.s.b.s.c.boot.FirstAppByGuiApplication  : Started FirstAppByGuiApplication in 2.579 seconds (JVM running for 3.212)
+当前 helloWorld Bean 实现类：org.springframework.web.reactive.function.server.RouterFunctions$DefaultRouterFunction
+当前 WebConfiguration Bean 实现类：xmg.spring.boot.samples.chapter5.config.WebConfiguration$$EnhancerBySpringCGLIB$$3a1ea545
+
+```
+***提升的不是 @Bean 而是 @Configuration***
 
 ### 5.6 理解自动配置机制 
+```java
+public class FirstAppByGuiApplication {
 
+    public static void main(String[] args) {
+        SpringApplication.run(WebConfiguration.class);
+    }
+
+}
+
+
+```
+以上是主动导入 WebConfiguration 配置   
+
+那么改成这样呢？
+```java
+@EnableAutoConfiguration
+public class FirstAppByGuiApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(FirstAppByGuiApplication.class);
+    }
+
+}
+```
+```java
+
+
+@Configuration
+public class WebConfiguration {
+    /**
+     * webflux
+     */
+    @Bean
+    public RouterFunction<ServerResponse> helloWorld() {
+        return route(GET("/hello"), request -> ok().body(Mono.just("Hello World"), String.class));
+    }
+
+    /**
+     * 输出 WebServer 实现类
+     */
+    @Bean
+    public ApplicationRunner applicationRunner(BeanFactory beanFactory) {
+        return args -> {
+            System.out.println("当前 helloWorld Bean 实现类：" +
+                    beanFactory.getBean("helloWorld").getClass().getName());
+
+            System.out.println("当前 WebConfiguration Bean 实现类：" +
+                    beanFactory.getBean(WebConfiguration.class).getClass().getName());
+        };
+    }
+}
+
+```
+结果 配置文件没有装配：
+
+```text
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.1.5.RELEASE)
+
+2019-07-18 10:58:43.605  INFO 8536 --- [           main] x.s.b.s.c.boot.FirstAppByGuiApplication  : Starting FirstAppByGuiApplication on kali with PID 8536 (/opt/Codes/xmg-spring-boot-samples/chapter5/target/classes started by root in /opt/Codes/xmg-spring-boot-samples)
+2019-07-18 10:58:43.610  INFO 8536 --- [           main] x.s.b.s.c.boot.FirstAppByGuiApplication  : No active profile set, falling back to default profiles: default
+2019-07-18 10:58:45.099  INFO 8536 --- [           main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port(s): 8080
+2019-07-18 10:58:45.102  INFO 8536 --- [           main] x.s.b.s.c.boot.FirstAppByGuiApplication  : Started FirstAppByGuiApplication in 2.034 seconds (JVM running for 2.451)
+
+```
+如果加上扫描路径就可以了，但是这并非自动装配 ：
+```java
+@EnableAutoConfiguration
+@ComponentScan("xmg.spring.boot.samples.chapter5.config")
+public class FirstAppByGuiApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(FirstAppByGuiApplication.class);
+    }
+
+}
+
+```
 ### 5.7 创建自动装配类 
+添加文件 WebAutoConfiguration，spring.factories ：
+```text
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   └── xmg
+│   │   │       └── spring
+│   │   │           └── boot
+│   │   │               └── samples
+│   │   │                   └── chapter5
+│   │   │                       ├── boot
+│   │   │                       │   └── FirstAppByGuiApplication.java
+│   │   │                       └── config
+│   │   │                           ├── WebAutoConfiguration.java
+│   │   │                           └── WebConfiguration.java
+│   │   └── resources
+│   │       └── META-INF
+│   │           └── spring.factories
 
+```
+```java
+@EnableAutoConfiguration
+public class FirstAppByGuiApplication {
 
+    public static void main(String[] args) {
+        SpringApplication.run(FirstAppByGuiApplication.class);
+    }
+
+}
+
+```
+WebConfiguration:  
+```java
+@Configuration
+public class WebConfiguration {
+...
+    
+}
+
+```
+WebAutoConfiguration:  
+```java
+@Configuration
+@Import(WebConfiguration.class)
+public class WebAutoConfiguration {
+}
+
+```
+spring.factories:  
+```text
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  xmg.spring.boot.samples.chapter5.config.WebAutoConfiguration
+```
+结果：
+```text
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.1.5.RELEASE)
+
+2019-07-18 11:09:23.729  INFO 9523 --- [           main] x.s.b.s.c.boot.FirstAppByGuiApplication  : Starting FirstAppByGuiApplication on kali with PID 9523 (/opt/Codes/xmg-spring-boot-samples/chapter5/target/classes started by root in /opt/Codes/xmg-spring-boot-samples)
+2019-07-18 11:09:23.732  INFO 9523 --- [           main] x.s.b.s.c.boot.FirstAppByGuiApplication  : No active profile set, falling back to default profiles: default
+2019-07-18 11:09:25.619  INFO 9523 --- [           main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port(s): 8080
+2019-07-18 11:09:25.624  INFO 9523 --- [           main] x.s.b.s.c.boot.FirstAppByGuiApplication  : Started FirstAppByGuiApplication in 2.401 seconds (JVM running for 2.917)
+当前 helloWorld Bean 实现类：org.springframework.web.reactive.function.server.RouterFunctions$DefaultRouterFunction
+当前 WebConfiguration Bean 实现类：xmg.spring.boot.samples.chapter5.config.WebConfiguration$$EnhancerBySpringCGLIB$$1f0143f9
+```
 
 ## 第六章　理解 Production Ready 特性
 
