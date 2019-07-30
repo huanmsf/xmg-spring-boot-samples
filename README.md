@@ -1032,6 +1032,25 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 ```
 
 ## 第六章　理解 Production Ready 特性
+### 6.2 Spring Boot Actuator
+```xml
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+```
+> http://127.0.0.1:8080/actuator
+
+### 6.4 外部化配置  
+* Bean @Value
+* Spring Environment  
+* @ConfigurationProperties  
+
+### 6.5 规约大于配置 
+> Spring Framework 是 Spring Boot 的“基础设施”。Spring Boot 的基本特性均来自 Spring Framework. Spring Boot 不但无法取代 Spring Framework,
+而且还实现了 Sprinrg Framework 的“自我救赎”。
+
+小马哥不仅技术牛逼，说话也文艺的一逼。
 
 ## 第七章 走向注解驱动编程
 
