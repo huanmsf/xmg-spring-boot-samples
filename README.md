@@ -1078,10 +1078,10 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 ```xml
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compier-plugin</artifactId>
+                <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
                 <configuration>
-                    <souce>${java.version}</souce>
+                    <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
